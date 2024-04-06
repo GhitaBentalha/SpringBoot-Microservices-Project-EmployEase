@@ -1,8 +1,11 @@
 package com.hirehub.EmployEase.job;
 
+import com.hirehub.EmployEase.company.Company;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Job {
@@ -15,22 +18,33 @@ public class Job {
 	private String minSalary;
 	private String maxSalary;
 	private String location;
-	
-	public Job()
-	{
 
+	@ManyToOne
+	private Company company;
+	public Company getCompany() {
+		return company;
 	}
 
-	public Job(long id, String title, String description, String minSalary, String maxSalary, String location) {
-		super();
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+	public Job(long id, String title, String description, String minSalary, String maxSalary, String location,
+			Company company) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.minSalary = minSalary;
 		this.maxSalary = maxSalary;
 		this.location = location;
+		this.company = company;
 	}
 
+	public Job()
+	{
+
+	}
+	
 	public long getId() {
 		return id;
 	}
