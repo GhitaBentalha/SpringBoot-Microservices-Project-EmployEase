@@ -1,7 +1,14 @@
 package com.hirehub.EmployEase.job;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
 public class Job {
 
+	@Id
+	@GeneratedValue
 	private long id;
 	private String title;
 	private String description;
@@ -9,6 +16,11 @@ public class Job {
 	private String maxSalary;
 	private String location;
 	
+	public Job()
+	{
+
+	}
+
 	public Job(long id, String title, String description, String minSalary, String maxSalary, String location) {
 		super();
 		this.id = id;
