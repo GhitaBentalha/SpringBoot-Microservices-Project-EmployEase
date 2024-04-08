@@ -27,6 +27,12 @@ public class CompanyController {
 		return ResponseEntity.ok((companyService.getAllCompanies()));
 	}
 
+	@GetMapping("/hello")
+	public String helloWorld()
+	{
+		return "hello!";
+	}
+	
 	@GetMapping("/companies/{id}")
 	public ResponseEntity<Company> getCompanyById(@PathVariable Long id)
 	{
