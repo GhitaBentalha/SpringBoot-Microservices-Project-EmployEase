@@ -1,4 +1,4 @@
-package com.hirehub.EmployEase.dto;
+package com.hirehub.EmployEase.jobapplication;
 import java.util.Random;
 import java.security.SecureRandom;
 

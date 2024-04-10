@@ -1,13 +1,21 @@
 package com.hirehub.EmployEase.job;
 
-import com.hirehub.EmployEase.company.Company;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hirehub.EmployEase.company.Company;
+import com.hirehub.EmployEase.jobapplication.JobApplication;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import lombok.Data;
 
 @Entity
+@Data
 public class Job {
 
 	@Id
@@ -18,6 +26,14 @@ public class Job {
 	private String minSalary;
 	private String maxSalary;
 	private String location;
+	private Integer experience;
+	private JOB_TYPE jobType;
+
+
+
+	@OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+	@JsonIgnore
+	private List<JobApplication> applicants;
 
 	@ManyToOne
 	private Company company;

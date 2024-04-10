@@ -1,6 +1,6 @@
-package com.hirehub.EmployEase.dto;
+package com.hirehub.EmployEase.jobapplication;
 
-public enum JobApplicationStatus {
+public enum JOB_APPLICATION_STATUS {
     APPLIED,
     CANCELLED,
     SHORTLISTED,

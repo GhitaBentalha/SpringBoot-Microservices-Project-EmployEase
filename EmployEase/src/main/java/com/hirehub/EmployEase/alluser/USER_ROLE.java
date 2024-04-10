@@ -1,4 +1,4 @@
-package com.hirehub.EmployEase.model;
+package com.hirehub.EmployEase.alluser;
 
 public enum USER_ROLE {
     ROLE_EMPLOYEE,

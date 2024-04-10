@@ -1,13 +1,12 @@
-package com.hirehub.EmployEase.model;
+package com.hirehub.EmployEase.alluser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hirehub.EmployEase.dto.JobApplicationDto;
+import com.hirehub.EmployEase.jobapplication.JobApplication;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,8 +18,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -30,11 +29,13 @@ public class User {
     private String email;
     private String password;
     private USER_ROLE role;
-    private MultipartFile resume;
-    private MultipartFile profilePhoto;
+    private String resume;
+    private String profilePhoto;
+    private List<String> skills;
 
-    @OneToMany
     @JsonIgnore
-    private List<JobApplicationDto> JobApplications = new ArrayList<>();
+    @OneToMany
+    @ElementCollection
+    private List<JobApplication> JobApplications = new ArrayList<>();
 
 }

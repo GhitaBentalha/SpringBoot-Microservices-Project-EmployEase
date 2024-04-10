@@ -6,13 +6,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hirehub.EmployEase.job.Job;
 import com.hirehub.EmployEase.review.Review;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.Data;
 
 @Entity
+@Data
 public class Company {
 
     @Id
@@ -20,12 +24,17 @@ public class Company {
     private Long id;
     private String name;
     private String description;
+    
+    @Column(length =1000)
+    private String companyLogo;
+    private boolean hiring;
 
-    @OneToMany(mappedBy = "company")
+
+    @OneToMany(mappedBy = "company",cascade=CascadeType.ALL,orphanRemoval = true)
     @JsonIgnore
     private List<Job> jobs;
     
-    @OneToMany(mappedBy="company")
+    @OneToMany(mappedBy="company",cascade=CascadeType.ALL,orphanRemoval = true)
     private List<Review> reviews;
 
     public Company()
