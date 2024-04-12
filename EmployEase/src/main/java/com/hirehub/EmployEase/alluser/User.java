@@ -13,7 +13,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class User {
@@ -53,8 +53,8 @@ public class User {
     private List<String> skills;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    private List<Company> ownedCompanies;
+    @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL)
+    private Company ownedCompany;
 
     public Long getId() {
         return id;

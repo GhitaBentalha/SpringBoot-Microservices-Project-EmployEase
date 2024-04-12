@@ -8,14 +8,14 @@ import com.hirehub.EmployEase.jobapplication.JobApplication;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import lombok.Data;
 
 @Entity
-@Data
 public class Job {
 
 	@Id
@@ -27,6 +27,8 @@ public class Job {
 	private String maxSalary;
 	private String location;
 	private Integer experience;
+
+	@Enumerated(EnumType.STRING)
 	private JOB_TYPE jobType;
 
 
@@ -41,27 +43,55 @@ public class Job {
 		return company;
 	}
 
-	public void setCompany(Company company) {
+	public Job(long id, String title, String description, String minSalary, String maxSalary, String location,
+            Integer experience, JOB_TYPE jobType, List<JobApplication> applicants, Company company) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.minSalary = minSalary;
+        this.maxSalary = maxSalary;
+        this.location = location;
+        this.experience = experience;
+        this.jobType = jobType;
+        this.applicants = applicants;
+        this.company = company;
+    }
+
+    public void setCompany(Company company) {
 		this.company = company;
 	}
 
-	public Job(long id, String title, String description, String minSalary, String maxSalary, String location,
-			Company company) {
-		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.minSalary = minSalary;
-		this.maxSalary = maxSalary;
-		this.location = location;
-		this.company = company;
-	}
 
 	public Job()
 	{
 
 	}
 	
-	public long getId() {
+	public Integer getExperience() {
+        return experience;
+    }
+
+    public void setExperience(Integer experience) {
+        this.experience = experience;
+    }
+
+    public JOB_TYPE getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(JOB_TYPE jobType) {
+        this.jobType = jobType;
+    }
+
+    public List<JobApplication> getApplicants() {
+        return applicants;
+    }
+
+    public void setApplicants(List<JobApplication> applicants) {
+        this.applicants = applicants;
+    }
+
+    public long getId() {
 		return id;
 	}
 
@@ -108,7 +138,13 @@ public class Job {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
-	
+
+    public boolean isFullTime() {
+        return jobType == JOB_TYPE.FULL_TIME;
+    }
+
+    public boolean isInternship() {
+        return jobType == JOB_TYPE.INTERNSHIP;
+    }
 	
 }

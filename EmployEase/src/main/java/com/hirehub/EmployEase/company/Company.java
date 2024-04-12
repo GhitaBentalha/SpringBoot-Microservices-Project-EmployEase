@@ -13,8 +13,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Company {
@@ -25,7 +25,7 @@ public class Company {
     private String name;
     private String description;
 
-    @ManyToOne
+    @OneToOne
     private User owner;
     
     @Column(length =1000)

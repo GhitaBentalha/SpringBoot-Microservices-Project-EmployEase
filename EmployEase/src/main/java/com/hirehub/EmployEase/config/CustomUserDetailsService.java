@@ -2,6 +2,7 @@ package com.hirehub.EmployEase.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,17 +24,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username);
-        if(user==null)
+        Optional<User> userOptional = userRepository.findByEmailId(username);
+        if(userOptional.isEmpty())
         {
             throw new UsernameNotFoundException("User not found with email "+username);
         }
-
+        User user = userOptional.get();
         USER_ROLE role=user.getRole();
         if(role==null) role=USER_ROLE.ROLE_EMPLOYEE;
         List<GrantedAuthority> authorities=new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role.toString()));
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),authorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmailId(),user.getPassword(),authorities);
     }
 }

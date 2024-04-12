@@ -4,14 +4,15 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 @RestController
+@RequestMapping("api/jobs")
 public class JobController {
 
 	private JobService jobService;
@@ -20,49 +21,33 @@ public class JobController {
 		this.jobService = jobService;
 	}
 
-	@GetMapping("/jobs")
-	public ResponseEntity<List<Job>> findAll()
+	@GetMapping("")
+	public ResponseEntity<List<Job>> findAll(@RequestHeader("Authorization") String jwt)
 	{
 		return ResponseEntity.ok((jobService.findAll()));
 	}
-	
-	@PostMapping("/jobs")
-	public ResponseEntity<Job> createJob(@RequestBody Job job)
-	{
-		jobService.createJob(job);
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
 
-	@GetMapping("/jobs/{id}")
-	public ResponseEntity<Job> getJobById(@PathVariable Long id)
+	@GetMapping("/{id}")
+	public ResponseEntity<Job> getJobById(@PathVariable Long id,@RequestHeader("Authorization") String jwt)
 	{
-       Job job = jobService.findById(id);
+       Job job = jobService.findJobById(id);
 	   if(job!=null)
 	   return new ResponseEntity<>(job,HttpStatus.OK);
 	   return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
-	@DeleteMapping("/jobs/{id}")
-	public ResponseEntity<String> deleteJobById(@PathVariable Long id)
+    @GetMapping("/search")
+    public ResponseEntity<List<Job>> searchJob(@RequestHeader("Authorization") String jwt,
+	@RequestParam String keyword)
 	{
-		boolean deleted = jobService.deleteJobById(id);
-		if(deleted)
-		{
-			return new ResponseEntity<>("Job deleted successfully",HttpStatus.OK);
-		}
-		else
-		{
-			return new ResponseEntity<>("Job not found!",HttpStatus.NOT_FOUND);
-		}
+		return ResponseEntity.ok((jobService.searchJob(keyword)));
 	}
 
-	@PutMapping("/jobs/{id}")
-	public ResponseEntity<String> updateJobById(@PathVariable Long id,
-	@RequestBody Job updatedJob)
+    @GetMapping("/companies/{companyId}")
+    public ResponseEntity<List<Job>> getSpecificJobs(@RequestHeader("Authorization") String jwt,
+	@RequestParam boolean isFullTime, @RequestParam boolean isPartTime, @RequestParam boolean isInternship, @PathVariable Long companyId)
 	{
-		boolean updated = jobService.updateJobById(id,updatedJob);
-		if(updated)
-		return new ResponseEntity<>("Job updated successfully",HttpStatus.OK);
-		return new ResponseEntity<>("Job not found!",HttpStatus.NOT_FOUND);
+		return ResponseEntity.ok(jobService.getSpecificJobs(companyId,isFullTime,isPartTime,isInternship));
 	}
+
 }
