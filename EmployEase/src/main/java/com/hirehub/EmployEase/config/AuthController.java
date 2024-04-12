@@ -1,6 +1,7 @@
 package com.hirehub.EmployEase.config;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,19 +44,20 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception{
-        User isEmailExist = userRepository.findByEmail(user.getEmail());
-        if(isEmailExist!=null)
+        Optional<User> isEmailIdExist = userRepository.findByEmailId(user.getEmailId());
+        if(isEmailIdExist.isPresent())
         {
             throw new Exception("User already exists with this email!!");
         }
         
         User createdUser = new User();
-        createdUser.setEmail(user.getEmail());
+        createdUser.setEmailId(user.getEmailId());
         createdUser.setFullName(user.getFullName());
         createdUser.setRole(user.getRole());
         createdUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        createdUser.setSkills(user.getSkills());
         User savedUser = userRepository.save(createdUser);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmailId(), user.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
         AuthResponse authResponse = new AuthResponse();
@@ -68,7 +70,7 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<AuthResponse> signin(@RequestBody LoginRequest request)
     {
-        String username = request.getEmail();
+        String username = request.getEmailId();
         String password = request.getPassword();
         Authentication authentication=authenticate(username,password);
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
