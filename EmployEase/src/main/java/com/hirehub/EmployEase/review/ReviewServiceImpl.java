@@ -26,7 +26,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public boolean addReview(Long companyId,Review review) {
-        Company company = companyService.findById(companyId);
+        Company company = companyService.findCompanyById(companyId);
         if(company!=null)
         {
             review.setCompany(company);
@@ -40,15 +40,16 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Review findById(Long companyId, Long reviewId) {
-      List<Review> reviews = reviewRepository.findByCompanyId(companyId);
-      return reviews.stream().filter(review->review.getId()
+    public Review findReviewById(Long companyId, Long reviewId) {
+        List<Review> reviews = getAllReviews(companyId);
+             return reviews.stream().filter(review->review.getId()
             .equals(reviewId)).findFirst().orElse(null);
     }
 
     @Override
-    public boolean updateReviewByiId(Long companyId, Long reviewId, Review review) {
-       Review reviewtoUpdate = findById(companyId, reviewId);
+    public boolean updateReviewByiId(Long reviewId, Review review) {
+       Long companyId = review.getCompany().getId();
+       Review reviewtoUpdate = findReviewById(companyId,reviewId);
        if(reviewtoUpdate!=null)
        {
         reviewtoUpdate.setTitle(review.getTitle());
@@ -64,8 +65,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public boolean deleteReviewById(Long companyId, Long reviewId) {
-        Review reviewtoDelete = findById(companyId, reviewId);
+    public boolean deleteReviewById(Long companyId,Long reviewId) {
+        Review reviewtoDelete = findReviewById(companyId,reviewId);
         if(reviewtoDelete!=null)
         {
          reviewRepository.delete(reviewtoDelete);
@@ -75,6 +76,21 @@ public class ReviewServiceImpl implements ReviewService {
         {
          return false;
         }
+    }
+
+    @Override
+    public double averageRating(Long companyId) {
+        List<Review> reviews = getAllReviews(companyId);
+        if (reviews.isEmpty()) {
+            return 0; 
+        }
+
+        double totalRating = 0;
+        for (Review review : reviews) {
+            totalRating += review.getRating();
+        }
+
+        return totalRating / reviews.size();
     }
 
 }

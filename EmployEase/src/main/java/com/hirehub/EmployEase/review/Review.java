@@ -1,5 +1,4 @@
 package com.hirehub.EmployEase.review;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hirehub.EmployEase.company.Company;
 
@@ -11,6 +10,14 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Review {
+
+    public Review(Long id, String title, String description, double rating, Company company) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.rating = rating;
+        this.company = company;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,6 +72,5 @@ public class Review {
     public void setRating(double rating) {
         this.rating = rating;
     }
-
 
 }

@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/companies/{companyId}")
+@RequestMapping("/api/reviews")
 public class ReviewController {
 
     private ReviewService reviewService;
@@ -22,17 +24,17 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @GetMapping("/reviews")
-    public ResponseEntity<List<Review>> getAllReview(@PathVariable Long companyId)
+    @GetMapping("")
+    public ResponseEntity<List<Review>> getAllReview(@RequestHeader("Authorization") String jwt,@PathVariable Long companyId)
     {
         return new ResponseEntity<>(reviewService.getAllReviews(companyId),
         HttpStatus.OK);
     }
 
-    @GetMapping("/reviews/{reviewId}")
-    public ResponseEntity<Review> getReviewById(@PathVariable Long companyId,@PathVariable Long reviewId)
+    @GetMapping("/{id}")
+    public ResponseEntity<Review> getReviewById(@RequestHeader("Authorization") String jwt,@RequestParam Long companyId,@PathVariable Long reviewId)
     {
-        Review review = reviewService.findById(companyId,reviewId);
+        Review review = reviewService.findReviewById(companyId,reviewId);
         if(review!=null){
             return new ResponseEntity<>(review,HttpStatus.OK);
         }
@@ -41,12 +43,18 @@ public class ReviewController {
         }
     }
 
-    @PostMapping("/reviews")
-    public ResponseEntity<String> addReview(@PathVariable Long companyId,@RequestBody Review review)
+    @GetMapping("/average-rating/{companyId}")
+    public ResponseEntity<Double> getAverageRating(@RequestHeader("Authorization") String jwt,@PathVariable Long companyId) {
+        double averageRating = reviewService.averageRating(companyId);
+        return new ResponseEntity<>(averageRating, HttpStatus.OK);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<String> addReview(@RequestHeader("Authorization") String jwt, @PathVariable Long companyId,@RequestBody Review review)
     {
-        boolean isReviewAdded =   reviewService.addReview(companyId,review);;
+        boolean isReviewAdded =   reviewService.addReview(companyId,review);
         if(isReviewAdded){
-        return new ResponseEntity<>("Review added successfully!",HttpStatus.CREATED);
+            return new ResponseEntity<>("Review added successfully!",HttpStatus.CREATED);
         }
         else
         {
@@ -54,10 +62,10 @@ public class ReviewController {
         }
     }
 
-    @PutMapping("/reviews/{reviewId}")
-    public  ResponseEntity<String> updateReview(@PathVariable Long companyId, @PathVariable Long reviewId, @RequestBody Review review)
+    @PutMapping("/{id}")
+    public  ResponseEntity<String> updateReview(@RequestHeader("Authorization") String jwt, @PathVariable Long reviewId, @RequestBody Review review)
     {
-        boolean isUpdated = reviewService.updateReviewByiId(companyId,reviewId,review);
+        boolean isUpdated = reviewService.updateReviewByiId(reviewId,review);
         if(isUpdated)
         {
             return new ResponseEntity<>("Review updated successfully!",HttpStatus.OK);
@@ -68,8 +76,8 @@ public class ReviewController {
         }
     }
 
-    @DeleteMapping("/reviews/{reviewId}")
-    public  ResponseEntity<String> deleteReview(@PathVariable Long companyId, @PathVariable Long reviewId)
+    @DeleteMapping("/{id}")
+    public  ResponseEntity<String> deleteReview(@RequestHeader("Authorization") String jwt,@RequestParam Long companyId ,@PathVariable Long reviewId)
     {
         boolean isDeleted = reviewService.deleteReviewById(companyId,reviewId);
         if(isDeleted)

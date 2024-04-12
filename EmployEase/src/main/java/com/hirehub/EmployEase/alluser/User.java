@@ -52,6 +52,14 @@ public class User {
 
     private List<String> skills;
 
+    public Company getOwnedCompany() {
+        return ownedCompany;
+    }
+
+    public void setOwnedCompany(Company ownedCompany) {
+        this.ownedCompany = ownedCompany;
+    }
+
     @JsonIgnore
     @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL)
     private Company ownedCompany;
