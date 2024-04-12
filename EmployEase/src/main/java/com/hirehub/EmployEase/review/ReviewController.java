@@ -49,7 +49,7 @@ public class ReviewController {
         return new ResponseEntity<>(averageRating, HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PostMapping("/{companyId}")
     public ResponseEntity<String> addReview(@RequestHeader("Authorization") String jwt, @PathVariable Long companyId,@RequestBody Review review)
     {
         boolean isReviewAdded =   reviewService.addReview(companyId,review);
