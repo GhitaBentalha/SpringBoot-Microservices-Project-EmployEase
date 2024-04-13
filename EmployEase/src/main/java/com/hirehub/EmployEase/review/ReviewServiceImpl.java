@@ -47,8 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public boolean updateReviewByiId(Long reviewId, Review review) {
-       Long companyId = review.getCompany().getId();
+    public boolean updateReviewById(Long companyId,Long reviewId, Review review) {
        Review reviewtoUpdate = findReviewById(companyId,reviewId);
        if(reviewtoUpdate!=null)
        {
@@ -82,15 +81,15 @@ public class ReviewServiceImpl implements ReviewService {
     public double averageRating(Long companyId) {
         List<Review> reviews = getAllReviews(companyId);
         if (reviews.isEmpty()) {
-            return 0; 
+            return 0.0;
         }
-
+    
         double totalRating = 0;
         for (Review review : reviews) {
             totalRating += review.getRating();
         }
-
-        return totalRating / reviews.size();
+        double averageRating = totalRating / reviews.size();
+        return Math.round(averageRating * 10.0) / 10.0;
     }
 
 }

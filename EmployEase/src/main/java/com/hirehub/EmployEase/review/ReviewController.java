@@ -25,16 +25,16 @@ public class ReviewController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Review>> getAllReview(@RequestHeader("Authorization") String jwt,@PathVariable Long companyId)
+    public ResponseEntity<List<Review>> getAllReview(@RequestHeader("Authorization") String jwt,@RequestParam Long companyId)
     {
         return new ResponseEntity<>(reviewService.getAllReviews(companyId),
         HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Review> getReviewById(@RequestHeader("Authorization") String jwt,@RequestParam Long companyId,@PathVariable Long reviewId)
+    public ResponseEntity<Review> getReviewById(@RequestHeader("Authorization") String jwt,@RequestParam Long companyId,@PathVariable Long id)
     {
-        Review review = reviewService.findReviewById(companyId,reviewId);
+        Review review = reviewService.findReviewById(companyId,id);
         if(review!=null){
             return new ResponseEntity<>(review,HttpStatus.OK);
         }
@@ -63,9 +63,9 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}")
-    public  ResponseEntity<String> updateReview(@RequestHeader("Authorization") String jwt, @PathVariable Long reviewId, @RequestBody Review review)
+    public  ResponseEntity<String> updateReview(@RequestHeader("Authorization") String jwt, @PathVariable Long id, @RequestBody Review review, @RequestParam Long companyId)
     {
-        boolean isUpdated = reviewService.updateReviewByiId(reviewId,review);
+        boolean isUpdated = reviewService.updateReviewById(companyId,id,review);
         if(isUpdated)
         {
             return new ResponseEntity<>("Review updated successfully!",HttpStatus.OK);
@@ -77,9 +77,9 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
-    public  ResponseEntity<String> deleteReview(@RequestHeader("Authorization") String jwt,@RequestParam Long companyId ,@PathVariable Long reviewId)
+    public  ResponseEntity<String> deleteReview(@RequestHeader("Authorization") String jwt,@RequestParam Long companyId ,@PathVariable Long id)
     {
-        boolean isDeleted = reviewService.deleteReviewById(companyId,reviewId);
+        boolean isDeleted = reviewService.deleteReviewById(companyId,id);
         if(isDeleted)
         {
             return new ResponseEntity<>("Review deleted successfully!",HttpStatus.OK);
