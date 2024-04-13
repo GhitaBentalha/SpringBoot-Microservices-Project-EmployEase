@@ -1,7 +1,6 @@
 package com.hirehub.EmployEase.alluser;
 
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.hirehub.EmployEase.config.JwtProvider;

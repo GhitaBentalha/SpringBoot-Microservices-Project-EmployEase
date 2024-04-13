@@ -1,12 +1,13 @@
 package com.hirehub.EmployEase.jobapplication;
 
 import java.time.LocalDateTime;
-
 import com.hirehub.EmployEase.alluser.User;
 import com.hirehub.EmployEase.job.Job;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
@@ -14,7 +15,8 @@ import jakarta.persistence.ManyToOne;
 public class JobApplication {
 
     @Id
-    public String jobApplicationId;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long jobApplicationId;
 
     @ManyToOne
     private User user;
@@ -25,7 +27,7 @@ public class JobApplication {
     @Enumerated(EnumType.STRING)
     private JOB_APPLICATION_STATUS status;
 
-    public JobApplication(String jobApplicationId, User user, Job job, JOB_APPLICATION_STATUS status,
+    public JobApplication( Long jobApplicationId,User user, Job job, JOB_APPLICATION_STATUS status,
             LocalDateTime appliedDate) {
         this.jobApplicationId = jobApplicationId;
         this.user = user;
@@ -36,11 +38,7 @@ public class JobApplication {
 
     private LocalDateTime appliedDate;
 
-    public String getJobApplicationId() {
-        return jobApplicationId;
-    }
-
-    public void setJobApplicationId(String jobApplicationId) {
+    public void setJobApplicationId(Long jobApplicationId) {
         this.jobApplicationId = jobApplicationId;
     }
 

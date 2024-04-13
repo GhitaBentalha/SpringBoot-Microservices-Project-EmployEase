@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface JobApplicationService {
 
-    JobApplication createJobApplication(JobApplication jobApplication);
+    JobApplication createJobApplication(JobApplication jobApplication,String emailId) throws Exception;
 
     JobApplication updateJobApplicationStatus(String jobApplicationId, JOB_APPLICATION_STATUS status);
 

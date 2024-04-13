@@ -1,10 +1,15 @@
 package com.hirehub.EmployEase.jobapplication;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.hirehub.EmployEase.alluser.UserService;
+import com.hirehub.EmployEase.job.Job;
+import com.hirehub.EmployEase.job.JobRepository;
+
 
 @Service
 public class JobApplicationServiceImpl implements JobApplicationService {
@@ -12,8 +17,19 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     @Autowired
     private JobApplicationRepository jobApplicationRepository;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private JobRepository jobRepository;
+
     @Override
-    public JobApplication createJobApplication(JobApplication jobApplication) {
+    public JobApplication createJobApplication(JobApplication jobApplication, String emailId) throws Exception {
+        jobApplication.setStatus(JOB_APPLICATION_STATUS.APPLIED);
+        jobApplication.setAppliedDate(LocalDateTime.now());
+        jobApplication.setUser(userService.findUserByEmailId(emailId));
+        Job job = jobRepository.findById(jobApplication.getJob().getId()).orElse(null);
+        jobApplication.setJob(job);
         return jobApplicationRepository.save(jobApplication);
     }
 
