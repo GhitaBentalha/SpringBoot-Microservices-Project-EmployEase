@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  employease:
+    image: employeaseimage
+    container_name: employeasecontainer
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_HOST=mysqlcontainer
+      - MYSQL_PORT=3306
+      - MYSQL_DB_NAME=employease_app
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=1703HareKrishna#
+    networks:
+      - mysqlnetwork
+
+  mysqlcontainer:
+    image: mysql
+    container_name: mysqlcontainer
+    environment:
+      MYSQL_ROOT_PASSWORD: 1703HareKrishna#
+      MYSQL_DATABASE: employease_app
+    ports:
+      - "3306:3306"
+    networks:
+      - mysqlnetwork
+
+networks:
+  mysqlnetwork:
+    external: true
