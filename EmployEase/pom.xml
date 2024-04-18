@@ -98,7 +98,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>employeaseapp</finalName>
 	</build>
 
 </project>

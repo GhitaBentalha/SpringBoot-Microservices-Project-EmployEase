@@ -42,7 +42,7 @@ public class AppConfig {
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                CorsConfiguration cfg = new CorsConfiguration();
                cfg.setAllowedOrigins(Arrays.asList(
-                "http://localhost:8080",
+                "http://localhost:5454",
                 "https://employease.hirehub.app"
                ));
                cfg.setAllowedMethods(Collections.singletonList("*"));
