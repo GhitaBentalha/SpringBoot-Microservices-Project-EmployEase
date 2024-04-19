@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hirehub.job.microservice.job.dto.JobWithCompanyDTO;
+
 @RestController
 @RequestMapping("api/jobs")
 public class JobController {
@@ -21,7 +23,7 @@ public class JobController {
 	}
 
 	@GetMapping("")
-	public ResponseEntity<List<Job>> findAll()
+	public ResponseEntity<List<JobWithCompanyDTO>> findAll()
 	{
 		return ResponseEntity.ok((jobService.findAll()));
 	}

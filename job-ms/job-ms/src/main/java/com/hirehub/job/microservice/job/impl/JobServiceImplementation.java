@@ -4,10 +4,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.hirehub.job.microservice.job.Job;
 import com.hirehub.job.microservice.job.JobRepository;
 import com.hirehub.job.microservice.job.JobService;
+import com.hirehub.job.microservice.job.dto.JobWithCompanyDTO;
+import com.hirehub.job.microservice.job.external.Company;
 
 @Service
 public class JobServiceImplementation implements JobService {
@@ -19,8 +22,21 @@ public class JobServiceImplementation implements JobService {
 }
 
     @Override
-    public List<Job> findAll() {
-        return jobRepository.findAll();
+    public List<JobWithCompanyDTO> findAll() {
+        List<Job> jobs = jobRepository.findAll();
+        return jobs.stream().map(this::convertToDto)
+        .collect(Collectors.toList());
+    }
+
+    private JobWithCompanyDTO convertToDto(Job job)
+    {
+        JobWithCompanyDTO jobWithCompanyDTO = new JobWithCompanyDTO();
+        jobWithCompanyDTO.setJob(job);
+        RestTemplate restTemplate = new RestTemplate();
+        Company company = restTemplate.getForObject("http://localhost:8081/api/companies/"+job.getCompanyId(),
+         Company.class);
+        jobWithCompanyDTO.setCompany(company);
+        return jobWithCompanyDTO;
     }
 
     @Override
