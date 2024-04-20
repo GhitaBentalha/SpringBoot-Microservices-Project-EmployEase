@@ -42,8 +42,8 @@ public class ReviewController {
         }
     }
 
-    @GetMapping("/average-rating/{companyId}")
-    public ResponseEntity<Double> getAverageRating(@PathVariable Long companyId) {
+    @GetMapping("/average-rating")
+    public ResponseEntity<Double> getAverageRating(@RequestParam Long companyId) {
         double averageRating = reviewService.averageRating(companyId);
         return new ResponseEntity<>(averageRating, HttpStatus.OK);
     }

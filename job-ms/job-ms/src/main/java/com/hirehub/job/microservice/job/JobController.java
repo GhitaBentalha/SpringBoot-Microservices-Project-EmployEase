@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hirehub.job.microservice.job.dto.JobWithCompanyDTO;
+import com.hirehub.job.microservice.job.dto.JobDTO;
 
 @RestController
 @RequestMapping("api/jobs")
@@ -23,17 +23,17 @@ public class JobController {
 	}
 
 	@GetMapping("")
-	public ResponseEntity<List<JobWithCompanyDTO>> findAll()
+	public ResponseEntity<List<JobDTO>> findAll()
 	{
 		return ResponseEntity.ok((jobService.findAll()));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Job> getJobById(@PathVariable Long id)
+	public ResponseEntity<JobDTO> getJobById(@PathVariable Long id)
 	{
-       Job job = jobService.findJobById(id);
-	   if(job!=null)
-	   return new ResponseEntity<>(job,HttpStatus.OK);
+       JobDTO jobWithCompanyDTO = jobService.findJobById(id);
+	   if(jobWithCompanyDTO!=null)
+	   return new ResponseEntity<>(jobWithCompanyDTO,HttpStatus.OK);
 	   return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
