@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.hirehub.job.microservice.job.JOB_STATUS;
 import com.hirehub.job.microservice.job.Job;
 import com.hirehub.job.microservice.job.JobRepository;
 import com.hirehub.job.microservice.job.JobService;
@@ -93,6 +94,18 @@ public class JobServiceImplementation implements JobService {
                 {
                     job.setExperience(updatedJob.getExperience());
                 }
+                if(updatedJob.getWorkMode()!=null)
+                {
+                    job.setWorkMode(updatedJob.getWorkMode());
+                }
+                if(updatedJob.getKeySkills()!=null)
+                {
+                    job.setKeySkills(updatedJob.getKeySkills());
+                }
+                if(updatedJob.getJobType()!=null)
+                {
+                    job.setJobType(updatedJob.getJobType());
+                }
                 jobRepository.save(job);
                 return true;
             }  
@@ -146,5 +159,17 @@ public class JobServiceImplementation implements JobService {
     @Override
     public List<Job> searchJob(String keyword) {
         return jobRepository.searchJob(keyword);
+    }
+
+    @Override
+    public boolean updateJobStatus(Long id, JOB_STATUS status) {
+        Optional<Job> jobOptional = jobRepository.findById(id);
+        if(jobOptional.isPresent())
+        {
+            Job job = jobOptional.get();
+            job.setStatus(status);
+            return true;
+        }
+        return false;
     }
 }

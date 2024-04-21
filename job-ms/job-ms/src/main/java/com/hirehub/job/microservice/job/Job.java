@@ -1,4 +1,6 @@
 package com.hirehub.job.microservice.job;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,6 +14,46 @@ public class Job {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	
+	private String title;
+	private String description;
+	private String minSalary;
+	private String maxSalary;
+	private String location;
+	private Integer experience;
+	private Long companyId;
+	private List<String> keySkills;
+
+	@Enumerated(EnumType.STRING)
+	private WORK_MODE workMode;
+
+	@Enumerated(EnumType.STRING)
+	private JOB_STATUS status;
+	
+	@Enumerated(EnumType.STRING)
+	private JOB_TYPE jobType;
+
+	public Job()
+	{
+
+	}
+
+	public Job(long id, String title, String description, String minSalary, String maxSalary, String location,
+			Integer experience, Long companyId, List<String> keySkills, WORK_MODE workMode, JOB_STATUS status,
+			JOB_TYPE jobType) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.minSalary = minSalary;
+		this.maxSalary = maxSalary;
+		this.location = location;
+		this.experience = experience;
+		this.companyId = companyId;
+		this.keySkills = keySkills;
+		this.workMode = workMode;
+		this.status = status;
+		this.jobType = jobType;
+	}
 
 	public Long getCompanyId() {
 		return companyId;
@@ -21,33 +63,29 @@ public class Job {
 		this.companyId = companyId;
 	}
 
-	private String title;
-	private String description;
-	private String minSalary;
-	private String maxSalary;
-	private String location;
-	private Integer experience;
-	private Long companyId;
 
-	@Enumerated(EnumType.STRING)
-	private JOB_TYPE jobType;
+	public List<String> getKeySkills() {
+		return keySkills;
+	}
 
-	public Job(long id, String title, String description, String minSalary, String maxSalary, String location,
-            Integer experience, JOB_TYPE jobType,Long companyId) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.minSalary = minSalary;
-        this.maxSalary = maxSalary;
-        this.location = location;
-        this.experience = experience;
-        this.jobType = jobType;
-        this.companyId = companyId;
-    }
+	public void setKeySkills(List<String> keySkills) {
+		this.keySkills = keySkills;
+	}
 
-	public Job()
-	{
+	public WORK_MODE getWorkMode() {
+		return workMode;
+	}
 
+	public void setWorkMode(WORK_MODE workMode) {
+		this.workMode = workMode;
+	}
+
+	public JOB_STATUS getStatus() {
+		return status;
+	}
+
+	public void setStatus(JOB_STATUS status) {
+		this.status = status;
 	}
 	
 	public Integer getExperience() {

@@ -18,6 +18,10 @@ public class JobMapper {
         jobWithCompanyDTO.setLocation(job.getLocation());
         jobWithCompanyDTO.setMinSalary(job.getMinSalary());
         jobWithCompanyDTO.setMaxSalary(job.getMaxSalary());
+        jobWithCompanyDTO.setKeySkills(job.getKeySkills());
+        jobWithCompanyDTO.setStatus(job.getStatus());
+        jobWithCompanyDTO.setWorkMode(job.getWorkMode());
+        jobWithCompanyDTO.setJobType(job.getJobType());
         jobWithCompanyDTO.setCompany(company);
         jobWithCompanyDTO.setReviews(reviews);
         jobWithCompanyDTO.setAverageRating(averageRating);

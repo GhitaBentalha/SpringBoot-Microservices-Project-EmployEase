@@ -13,6 +13,7 @@ public interface JobService {
     List<Job> getSpecificJobs(Long companyId, boolean isFullTime,
                  boolean isPartTime,boolean isInternship);
     List<Job> searchJob(String keyword);
+    boolean updateJobStatus(Long id, JOB_STATUS status);
 
 }
 
