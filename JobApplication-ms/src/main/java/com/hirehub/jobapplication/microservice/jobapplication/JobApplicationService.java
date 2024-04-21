@@ -2,19 +2,21 @@ package com.hirehub.jobapplication.microservice.jobapplication;
 
 import java.util.List;
 
+import com.hirehub.jobapplication.microservice.jobapplication.dto.JobApplicationDto;
+
 public interface JobApplicationService {
 
-    JobApplication createJobApplication(Long userId, Long jobId) throws Exception;
+    JobApplication createJobApplication(Long userId, Long jobId, Long companyId) throws Exception;
 
     JobApplication updateJobApplicationStatus(String jobApplicationId, JOB_APPLICATION_STATUS status);
 
     JobApplication updateJobApplication(JobApplication jobApplication);
 
-    List<JobApplication> getAllJobApplicationsForJob(Long jobId);
+    List<JobApplicationDto> getAllJobApplicationsForJob(Long jobId);
 
-    List<JobApplication> getAllJobApplicationsForUser(Long userId);
+    List<JobApplicationDto> getAllJobApplicationsForUser(Long userId);
 
-    JobApplication getJobApplicationById(String jobApplicationId);
+    JobApplicationDto getJobApplicationById(String jobApplicationId);
 
     void deleteJobApplication(String jobApplicationId);
 }

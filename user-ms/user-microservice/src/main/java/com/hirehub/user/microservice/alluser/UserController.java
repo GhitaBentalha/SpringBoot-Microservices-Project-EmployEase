@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,10 +17,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/profile")
-    public ResponseEntity<User> findUserByEmailId(@RequestParam String emailId) throws Exception
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<User> findUserId(@PathVariable Long id) throws Exception
     {
-        User user = userService.findUserByEmailId(emailId);
+        User user = userService.findByUserId(id);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 

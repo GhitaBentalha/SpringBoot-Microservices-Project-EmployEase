@@ -13,8 +13,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findUserByEmailId(String emailId){
-        Optional<User> user = userRepository.findByEmailId(emailId);
+    public User findByUserId(Long id){
+        Optional<User> user = userRepository.findById(id);
         return user.isPresent() ? user.get() : null;
     }
 

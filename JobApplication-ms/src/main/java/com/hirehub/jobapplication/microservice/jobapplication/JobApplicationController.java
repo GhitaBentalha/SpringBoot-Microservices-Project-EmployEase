@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hirehub.jobapplication.microservice.jobapplication.dto.JobApplicationDto;
+
 
 @RestController
 @RequestMapping("/api/job_applications")
@@ -24,28 +26,28 @@ public class JobApplicationController {
     private JobApplicationService jobApplicationService;
 
     @PostMapping("")
-    public ResponseEntity<JobApplication> createJobApplication(@RequestParam Long userId, @RequestParam Long jobId) throws Exception {
-        JobApplication createdJobApplication = jobApplicationService.createJobApplication(userId,jobId);
+    public ResponseEntity<JobApplication> createJobApplication(@RequestParam Long userId, @RequestParam Long jobId, @RequestParam Long companyId) throws Exception {
+        JobApplication createdJobApplication = jobApplicationService.createJobApplication(userId,jobId, companyId);
         return new ResponseEntity<>(createdJobApplication, HttpStatus.CREATED);
     }
 
     @GetMapping("/job")
-    public ResponseEntity<List<JobApplication>> getAllJobApplicationsForJob(@RequestParam Long jobId) {
-        List<JobApplication> jobApplications = jobApplicationService.getAllJobApplicationsForJob(jobId);
-        return new ResponseEntity<>(jobApplications, HttpStatus.OK);
+    public ResponseEntity<List<JobApplicationDto>> getAllJobApplicationsForJob(@RequestParam Long jobId) {
+        List<JobApplicationDto> jobApplicationDto = jobApplicationService.getAllJobApplicationsForJob(jobId);
+        return new ResponseEntity<>(jobApplicationDto, HttpStatus.OK);
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<JobApplication>> getAllJobApplicationsForUser(@RequestParam Long userId) {
-        List<JobApplication> jobApplications = jobApplicationService.getAllJobApplicationsForUser(userId);
-        return new ResponseEntity<>(jobApplications, HttpStatus.OK);
+    public ResponseEntity<List<JobApplicationDto>> getAllJobApplicationsForUser(@RequestParam Long userId) {
+        List<JobApplicationDto> jobApplicationDto = jobApplicationService.getAllJobApplicationsForUser(userId);
+        return new ResponseEntity<>(jobApplicationDto, HttpStatus.OK);
     }
 
     @GetMapping("/{jobApplicationId}")
-    public ResponseEntity<JobApplication> getJobApplicationById(@PathVariable String jobApplicationId) {
-        JobApplication jobApplication = jobApplicationService.getJobApplicationById(jobApplicationId);
-        if (jobApplication != null) {
-            return new ResponseEntity<>(jobApplication, HttpStatus.OK);
+    public ResponseEntity<JobApplicationDto> getJobApplicationById(@PathVariable String jobApplicationId) {
+        JobApplicationDto jobApplicationDto = jobApplicationService.getJobApplicationById(jobApplicationId);
+        if (jobApplicationDto != null) {
+            return new ResponseEntity<>(jobApplicationDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

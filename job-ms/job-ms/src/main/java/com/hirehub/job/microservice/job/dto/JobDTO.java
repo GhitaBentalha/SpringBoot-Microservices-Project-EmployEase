@@ -6,10 +6,17 @@ import com.hirehub.job.microservice.job.external.Review;
 
 public class JobDTO {
     
+    private Long id;
     private String title;
 	private String description;
 	private String minSalary;
-	private String maxSalary;
+	public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    private String maxSalary;
 	private String location;
     private Integer experience;
     private Company company;

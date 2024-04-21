@@ -102,17 +102,9 @@ public class JobServiceImplementation implements JobService {
 
     @Override
     public Job createJob(Job job,Long companyId) {
-        Job savedJob = new Job();
-        savedJob.setTitle(job.getTitle());
-        savedJob.setDescription(job.getDescription());
-        savedJob.setJobType(job.getJobType());
-        savedJob.setMinSalary(job.getMinSalary());
-        savedJob.setMaxSalary(job.getMaxSalary());
-        savedJob.setExperience(job.getExperience());
-        savedJob.setLocation(job.getLocation());
-        savedJob.setCompanyId(companyId);
-        jobRepository.save(savedJob);
-        return savedJob;
+        job.setCompanyId(companyId);
+        jobRepository.save(job);
+        return job;
     }
 
     @Override

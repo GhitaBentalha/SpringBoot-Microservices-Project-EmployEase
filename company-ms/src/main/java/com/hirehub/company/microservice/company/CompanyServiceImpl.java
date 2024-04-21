@@ -51,9 +51,10 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void createCompany(Company company,Long userId) {
+    public Company createCompany(Company company,Long userId) {
        company.setOwnerId(userId);
        companyRepository.save(company);
+       return company;
     }
 
     @Override

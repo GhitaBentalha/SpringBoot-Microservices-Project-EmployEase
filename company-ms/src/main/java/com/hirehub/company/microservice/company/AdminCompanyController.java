@@ -25,8 +25,8 @@ public class AdminCompanyController {
     @PostMapping()
 	public ResponseEntity<Company> createCompany(@RequestBody Company company, @RequestParam Long userId) throws Exception
 	{
-		companyService.createCompany(company,userId);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		Company createdCompany = companyService.createCompany(company,userId);
+		return new ResponseEntity<>(createdCompany, HttpStatus.CREATED);
 	}
     
     @PutMapping("/{id}")

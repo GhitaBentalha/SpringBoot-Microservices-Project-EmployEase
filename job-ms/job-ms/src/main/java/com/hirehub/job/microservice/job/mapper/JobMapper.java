@@ -11,6 +11,7 @@ public class JobMapper {
     public static JobDTO mapToJobWithCompanyDTO(Job job, Company company,List<Review> reviews, Double averageRating)
     {
         JobDTO jobWithCompanyDTO = new JobDTO();
+        jobWithCompanyDTO.setId(job.getId());
         jobWithCompanyDTO.setTitle(job.getTitle());
         jobWithCompanyDTO.setDescription(job.getDescription());
         jobWithCompanyDTO.setExperience(job.getExperience());
