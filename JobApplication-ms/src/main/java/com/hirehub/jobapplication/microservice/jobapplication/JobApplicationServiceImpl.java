@@ -7,8 +7,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
+import com.hirehub.jobapplication.microservice.jobapplication.clients.CompanyClient;
+import com.hirehub.jobapplication.microservice.jobapplication.clients.JobClient;
+import com.hirehub.jobapplication.microservice.jobapplication.clients.UserClient;
 import com.hirehub.jobapplication.microservice.jobapplication.dto.JobApplicationDto;
 import com.hirehub.jobapplication.microservice.jobapplication.external.Company;
 import com.hirehub.jobapplication.microservice.jobapplication.external.Job;
@@ -22,7 +23,13 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     private JobApplicationRepository jobApplicationRepository;
 
     @Autowired
-    RestTemplate restTemplate;
+    UserClient userClient;
+
+    @Autowired
+    CompanyClient companyClient;
+
+    @Autowired
+    JobClient jobClient;
 
     @Override
     public JobApplication createJobApplication(Long userId, Long jobId, Long companyId) throws Exception {
@@ -54,12 +61,9 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     private JobApplicationDto convertToDto(JobApplication jobApplication)
     {
-        Job job = restTemplate.getForObject("http://JOB-SERVICE:8082/api/jobs/"+jobApplication.getJobId(),
-        Job.class);
-        Company company = restTemplate.getForObject("http://COMPANY-SERVICE:8081/api/companies/"+jobApplication.getCompanyId(),
-        Company.class);
-        User user = restTemplate.getForObject("http://USER-SERVICE:5454/api/users/profile/"+jobApplication.getUserId(),
-        User.class);
+        Job job = jobClient.getJobById(jobApplication.getJobId());
+        Company company = companyClient.getCompany(jobApplication.getCompanyId());
+        User user = userClient.findUserId(jobApplication.getUserId());
         JobApplicationDto jobApplicationDto = JobApplicationMapper.mapToJobApplicationDto(jobApplication, job, company, user);
         return jobApplicationDto;
     }

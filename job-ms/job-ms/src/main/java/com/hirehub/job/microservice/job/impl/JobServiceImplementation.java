@@ -2,18 +2,13 @@ package com.hirehub.job.microservice.job.impl;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.hirehub.job.microservice.job.JOB_STATUS;
 import com.hirehub.job.microservice.job.Job;
 import com.hirehub.job.microservice.job.JobRepository;
 import com.hirehub.job.microservice.job.JobService;
+import com.hirehub.job.microservice.job.clients.CompanyClient;
+import com.hirehub.job.microservice.job.clients.ReviewClient;
 import com.hirehub.job.microservice.job.dto.JobDTO;
 import com.hirehub.job.microservice.job.external.Company;
 import com.hirehub.job.microservice.job.external.Review;
@@ -24,11 +19,13 @@ public class JobServiceImplementation implements JobService {
 
    private JobRepository jobRepository;
 
-   @Autowired
-   RestTemplate restTemplate;
+   private CompanyClient companyClient;
+   private ReviewClient reviewClient;
    
-    public JobServiceImplementation(JobRepository jobRepository) {
+    public JobServiceImplementation(JobRepository jobRepository, CompanyClient companyClient, ReviewClient reviewClient) {
     this.jobRepository = jobRepository;
+    this.companyClient = companyClient;
+    this.reviewClient = reviewClient;
 }
 
     @Override
@@ -40,13 +37,9 @@ public class JobServiceImplementation implements JobService {
 
     private JobDTO convertToDto(Job job)
     {
-        Company company = restTemplate.getForObject("http://COMPANY-SERVICE:8081/api/companies/"+job.getCompanyId(),
-         Company.class);
-        ResponseEntity<List<Review>> reviewResponse = restTemplate.exchange("http://REVIEW-SERVICE:8083/api/reviews?companyId="+job.getCompanyId(),
-                HttpMethod.GET,null,new ParameterizedTypeReference<List<Review>>(){});
-        List<Review> reviews = reviewResponse.getBody();
-        Double averageRating = restTemplate.getForObject("http://REVIEW-SERVICE:8083/api/reviews/average-rating?companyId="+job.getCompanyId(),
-        Double.class);
+        Company company = companyClient.getCompany(job.getCompanyId());
+        List<Review> reviews = reviewClient.getReviews(job.getCompanyId());
+        Double averageRating =reviewClient.getAverageRating(job.getCompanyId());
         JobDTO jobWithCompanyDTO = JobMapper.mapToJobWithCompanyDTO(job, company, reviews,averageRating);
         return jobWithCompanyDTO;
     }
