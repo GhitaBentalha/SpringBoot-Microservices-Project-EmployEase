@@ -14,6 +14,8 @@ import com.hirehub.job.microservice.job.external.Company;
 import com.hirehub.job.microservice.job.external.Review;
 import com.hirehub.job.microservice.job.mapper.JobMapper;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 @Service
 public class JobServiceImplementation implements JobService {
 
@@ -29,6 +31,7 @@ public class JobServiceImplementation implements JobService {
 }
 
     @Override
+    @CircuitBreaker(name="companyBreaker")
     public List<JobDTO> findAll() {
         List<Job> jobs = jobRepository.findAll();
         return jobs.stream().map(this::convertToDto)
@@ -114,6 +117,7 @@ public class JobServiceImplementation implements JobService {
     }
 
     @Override
+    @CircuitBreaker(name="companyBreaker")
     public JobDTO findJobById(Long id) {
         Job job = jobRepository.findById(id).orElse(null);
         return convertToDto(job);
