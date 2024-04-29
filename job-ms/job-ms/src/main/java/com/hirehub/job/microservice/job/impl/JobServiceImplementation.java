@@ -1,4 +1,5 @@
 package com.hirehub.job.microservice.job.impl;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -6,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.hirehub.job.microservice.job.JOB_STATUS;
 import com.hirehub.job.microservice.job.Job;
 import com.hirehub.job.microservice.job.JobRepository;
+import com.hirehub.job.microservice.job.JobResult;
 import com.hirehub.job.microservice.job.JobService;
 import com.hirehub.job.microservice.job.clients.CompanyClient;
 import com.hirehub.job.microservice.job.clients.ReviewClient;
@@ -31,13 +33,19 @@ public class JobServiceImplementation implements JobService {
 }
 
     @Override
-    @CircuitBreaker(name="companyBreaker")
+    @CircuitBreaker(name="companyBreaker",fallbackMethod = "companyBreakerFallBack")
     public List<JobDTO> findAll() {
         List<Job> jobs = jobRepository.findAll();
         return jobs.stream().map(this::convertToDto)
         .collect(Collectors.toList());
     }
 
+    public List<String> companyBreakerFallBack(Throwable throwable) {
+        List<String> errList = new ArrayList<>();
+        errList.add("😥 Uh-oh! We ran into an issue...The service is currently unavailable. Our team is working on resolving the issue as quickly as possible. Please try again later. 🛠️");
+        return errList;
+    }
+    
     private JobDTO convertToDto(Job job)
     {
         Company company = companyClient.getCompany(job.getCompanyId());
@@ -117,14 +125,24 @@ public class JobServiceImplementation implements JobService {
     }
 
     @Override
-    @CircuitBreaker(name="companyBreaker")
-    public JobDTO findJobById(Long id) {
+    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallBackForId")
+    public JobResult findJobById(Long id) {
         Job job = jobRepository.findById(id).orElse(null);
-        return convertToDto(job);
+        if (job == null) {
+            return new JobResult("Job not found");
+        }
+        JobDTO jobDTO = convertToDto(job);
+        return new JobResult(jobDTO);
     }
 
+    public JobResult companyBreakerFallBackForId(Long id, Throwable throwable) {
+        String errorMessage = "😥 Uh-oh! We ran into an issue...The service is currently unavailable. Our team is working on resolving the issue as quickly as possible. Please try again later. 🛠️";
+        return new JobResult(errorMessage);
+    }    
+
     @Override
-    public List<Job> getSpecificJobs(Long companyId , boolean isFullTime, boolean isPartTime, boolean isInternship) {
+    @CircuitBreaker(name="companyBreaker",fallbackMethod = "companyBreakerFallBack")
+    public List<JobDTO> getSpecificJobs(Long companyId , boolean isFullTime, boolean isPartTime, boolean isInternship) {
        List<Job> jobs = jobRepository.findByCompanyId(companyId);
        if(isFullTime)
         {
@@ -138,13 +156,13 @@ public class JobServiceImplementation implements JobService {
         {
             jobs = filterByInternship(jobs,isInternship); 
         }
-        return jobs;
+        return jobs.stream().map(this::convertToDto)
+        .collect(Collectors.toList());
     }
 
     private List<Job> filterByInternship(List<Job> jobs, boolean isInternship) {
         return jobs.stream().filter(job->job.isInternship()==true).collect(Collectors.toList());
     }
-
     private List<Job> filterByPartTime(List<Job> jobs, boolean isPartTime) {
         return jobs.stream().filter(job->job.isFullTime()==false).collect(Collectors.toList());
     }
@@ -154,8 +172,11 @@ public class JobServiceImplementation implements JobService {
     }
 
     @Override
-    public List<Job> searchJob(String keyword) {
-        return jobRepository.searchJob(keyword);
+    @CircuitBreaker(name="companyBreaker",fallbackMethod = "companyBreakerFallBack")
+    public List<JobDTO> searchJob(String keyword) {
+        List<Job> jobs = jobRepository.searchJob(keyword);
+        return jobs.stream().map(this::convertToDto)
+        .collect(Collectors.toList());
     }
 
     @Override

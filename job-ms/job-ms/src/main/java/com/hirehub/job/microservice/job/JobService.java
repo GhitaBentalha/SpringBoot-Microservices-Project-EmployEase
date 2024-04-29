@@ -7,12 +7,12 @@ import com.hirehub.job.microservice.job.dto.JobDTO;
 public interface JobService {
     List<JobDTO> findAll();
 	Job createJob(Job job, Long companyId);
-    JobDTO findJobById(Long id);
+    JobResult findJobById(Long id);
     boolean deleteJobById(Long id);
     boolean updateJobById(Long id, Job updatedJob);
-    List<Job> getSpecificJobs(Long companyId, boolean isFullTime,
+    List<JobDTO> getSpecificJobs(Long companyId, boolean isFullTime,
                  boolean isPartTime,boolean isInternship);
-    List<Job> searchJob(String keyword);
+    List<JobDTO> searchJob(String keyword);
     boolean updateJobStatus(Long id, JOB_STATUS status);
 
 }

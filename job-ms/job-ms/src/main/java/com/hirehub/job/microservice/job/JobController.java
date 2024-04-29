@@ -29,22 +29,22 @@ public class JobController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<JobDTO> getJobById(@PathVariable Long id)
+	public ResponseEntity<JobResult> getJobById(@PathVariable Long id)
 	{
-       JobDTO jobWithCompanyDTO = jobService.findJobById(id);
+       JobResult jobWithCompanyDTO = jobService.findJobById(id);
 	   if(jobWithCompanyDTO!=null)
 	   return new ResponseEntity<>(jobWithCompanyDTO,HttpStatus.OK);
 	   return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
     @GetMapping("/search")
-    public ResponseEntity<List<Job>> searchJob(@RequestParam String keyword)
+    public ResponseEntity<List<JobDTO>> searchJob(@RequestParam String keyword)
 	{
 		return ResponseEntity.ok((jobService.searchJob(keyword)));
 	}
 
     @GetMapping("/companies/{companyId}")
-    public ResponseEntity<List<Job>> getSpecificJobs(@RequestParam boolean isFullTime, @RequestParam boolean isPartTime, @RequestParam boolean isInternship, @PathVariable Long companyId)
+    public ResponseEntity<List<JobDTO>> getSpecificJobs(@RequestParam boolean isFullTime, @RequestParam boolean isPartTime, @RequestParam boolean isInternship, @PathVariable Long companyId)
 	{
 		return ResponseEntity.ok(jobService.getSpecificJobs(companyId,isFullTime,isPartTime,isInternship));
 	}
