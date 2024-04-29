@@ -17,6 +17,7 @@ import com.hirehub.job.microservice.job.external.Review;
 import com.hirehub.job.microservice.job.mapper.JobMapper;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 
 @Service
 public class JobServiceImplementation implements JobService {
@@ -25,7 +26,7 @@ public class JobServiceImplementation implements JobService {
 
    private CompanyClient companyClient;
    private ReviewClient reviewClient;
-   
+
     public JobServiceImplementation(JobRepository jobRepository, CompanyClient companyClient, ReviewClient reviewClient) {
     this.jobRepository = jobRepository;
     this.companyClient = companyClient;
@@ -33,11 +34,13 @@ public class JobServiceImplementation implements JobService {
 }
 
     @Override
-    @CircuitBreaker(name="companyBreaker",fallbackMethod = "companyBreakerFallBack")
+    @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
+    @CircuitBreaker(name = "companyCircuitBreaker", fallbackMethod = "companyBreakerFallBack")
     public List<JobDTO> findAll() {
         List<Job> jobs = jobRepository.findAll();
-        return jobs.stream().map(this::convertToDto)
-        .collect(Collectors.toList());
+        return jobs.stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toList());
     }
 
     public List<String> companyBreakerFallBack(Throwable throwable) {
@@ -125,7 +128,8 @@ public class JobServiceImplementation implements JobService {
     }
 
     @Override
-    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallBackForId")
+    @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallBackForId")
+    @CircuitBreaker(name = "companyCircuitBreaker", fallbackMethod = "companyBreakerFallBackForId")
     public JobResult findJobById(Long id) {
         Job job = jobRepository.findById(id).orElse(null);
         if (job == null) {
@@ -141,23 +145,22 @@ public class JobServiceImplementation implements JobService {
     }    
 
     @Override
-    @CircuitBreaker(name="companyBreaker",fallbackMethod = "companyBreakerFallBack")
-    public List<JobDTO> getSpecificJobs(Long companyId , boolean isFullTime, boolean isPartTime, boolean isInternship) {
-       List<Job> jobs = jobRepository.findByCompanyId(companyId);
-       if(isFullTime)
-        {
-            jobs = filterByFullTime(jobs,isFullTime);    
+    @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
+    @CircuitBreaker(name = "companyCircuitBreaker", fallbackMethod = "companyBreakerFallBack")
+    public List<JobDTO> getSpecificJobs(Long companyId, boolean isFullTime, boolean isPartTime, boolean isInternship) {
+        List<Job> jobs = jobRepository.findByCompanyId(companyId);
+        if (isFullTime) {
+            jobs = filterByFullTime(jobs, isFullTime);
         }
-        if(isPartTime)
-        {
-            jobs = filterByPartTime(jobs,isPartTime); 
+        if (isPartTime) {
+            jobs = filterByPartTime(jobs, isPartTime);
         }
-        if(isInternship)
-        {
-            jobs = filterByInternship(jobs,isInternship); 
+        if (isInternship) {
+            jobs = filterByInternship(jobs, isInternship);
         }
-        return jobs.stream().map(this::convertToDto)
-        .collect(Collectors.toList());
+        return jobs.stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toList());
     }
 
     private List<Job> filterByInternship(List<Job> jobs, boolean isInternship) {
@@ -172,11 +175,13 @@ public class JobServiceImplementation implements JobService {
     }
 
     @Override
-    @CircuitBreaker(name="companyBreaker",fallbackMethod = "companyBreakerFallBack")
+    @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
+    @CircuitBreaker(name = "companyCircuitBreaker", fallbackMethod = "companyBreakerFallBack")
     public List<JobDTO> searchJob(String keyword) {
         List<Job> jobs = jobRepository.searchJob(keyword);
-        return jobs.stream().map(this::convertToDto)
-        .collect(Collectors.toList());
+        return jobs.stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toList());
     }
 
     @Override
