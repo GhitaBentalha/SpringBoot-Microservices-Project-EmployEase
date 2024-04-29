@@ -27,8 +27,6 @@ public class JobServiceImplementation implements JobService {
    private CompanyClient companyClient;
    private ReviewClient reviewClient;
 
-   private int attempt = 0;
-
     public JobServiceImplementation(JobRepository jobRepository, CompanyClient companyClient, ReviewClient reviewClient) {
     this.jobRepository = jobRepository;
     this.companyClient = companyClient;
@@ -39,7 +37,6 @@ public class JobServiceImplementation implements JobService {
     @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
     @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
     public List<JobDTO> findAll() {
-        System.out.println("attempt= "+attempt);
         List<Job> jobs = jobRepository.findAll();
         return jobs.stream()
             .map(this::convertToDto)
@@ -134,7 +131,6 @@ public class JobServiceImplementation implements JobService {
     @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallBackForId")
     @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallBackForId")
     public JobResult findJobById(Long id) {
-        System.out.println("attempt= "+attempt);
         Job job = jobRepository.findById(id).orElse(null);
         if (job == null) {
             return new JobResult("Job not found");
