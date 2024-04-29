@@ -17,6 +17,7 @@ import com.hirehub.job.microservice.job.external.Review;
 import com.hirehub.job.microservice.job.mapper.JobMapper;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 
 @Service
@@ -36,6 +37,7 @@ public class JobServiceImplementation implements JobService {
     @Override
     @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
     @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
+    @RateLimiter(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
     public List<JobDTO> findAll() {
         List<Job> jobs = jobRepository.findAll();
         return jobs.stream()
@@ -130,6 +132,7 @@ public class JobServiceImplementation implements JobService {
     @Override
     @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallBackForId")
     @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallBackForId")
+    @RateLimiter(name = "companyBreaker", fallbackMethod = "companyBreakerFallBackForId")
     public JobResult findJobById(Long id) {
         Job job = jobRepository.findById(id).orElse(null);
         if (job == null) {
@@ -147,6 +150,7 @@ public class JobServiceImplementation implements JobService {
     @Override
     @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
     @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
+    @RateLimiter(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
     public List<JobDTO> getSpecificJobs(Long companyId, boolean isFullTime, boolean isPartTime, boolean isInternship) {
         List<Job> jobs = jobRepository.findByCompanyId(companyId);
         if (isFullTime) {
@@ -177,6 +181,7 @@ public class JobServiceImplementation implements JobService {
     @Override
     @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
     @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
+    @RateLimiter(name = "companyBreaker", fallbackMethod = "companyBreakerFallBack")
     public List<JobDTO> searchJob(String keyword) {
         List<Job> jobs = jobRepository.searchJob(keyword);
         return jobs.stream()

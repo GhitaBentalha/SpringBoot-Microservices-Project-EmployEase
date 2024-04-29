@@ -1,6 +1,7 @@
 package com.hirehub.jobapplication.microservice.jobapplication;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,6 +16,10 @@ import com.hirehub.jobapplication.microservice.jobapplication.external.Company;
 import com.hirehub.jobapplication.microservice.jobapplication.external.Job;
 import com.hirehub.jobapplication.microservice.jobapplication.external.User;
 import com.hirehub.jobapplication.microservice.jobapplication.mapper.JobApplicationMapper;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 
 @Service
 public class JobApplicationServiceImpl implements JobApplicationService {
@@ -69,13 +74,25 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
+    @Retry(name = "jobApplicationBreaker", fallbackMethod = "jobApplicationBreaker")
+    @CircuitBreaker(name = "jobApplicationBreaker", fallbackMethod = "jobApplicationBreaker")
+    @RateLimiter(name = "jobApplicationBreaker", fallbackMethod = "jobApplicationBreaker")
     public List<JobApplicationDto> getAllJobApplicationsForJob(Long jobId) {
         List<JobApplication> jobApplications = jobApplicationRepository.findByJobId(jobId);
         return jobApplications.stream().map(this::convertToDto)
         .collect(Collectors.toList());
     }
 
+      public List<String> jobApplicationBreaker(Throwable throwable) {
+        List<String> errList = new ArrayList<>();
+        errList.add("😥 Uh-oh! We ran into an issue...The service is currently unavailable. Our team is working on resolving the issue as quickly as possible. Please try again later. 🛠️");
+        return errList;
+    }
+
     @Override
+    @Retry(name = "jobApplicationBreaker", fallbackMethod = "jobApplicationBreaker")
+    @CircuitBreaker(name = "jobApplicationBreaker", fallbackMethod = "jobApplicationBreaker")
+    @RateLimiter(name = "jobApplicationBreaker", fallbackMethod = "jobApplicationBreaker")
     public List<JobApplicationDto> getAllJobApplicationsForUser(Long userId) {
         List<JobApplication> jobApplications = jobApplicationRepository.findByUserId(userId);
         return jobApplications.stream().map(this::convertToDto)
@@ -83,10 +100,18 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
+    @Retry(name = "jobApplicationBreaker", fallbackMethod = "jobApplicationBreakerForId")
+    @CircuitBreaker(name = "jobApplicationBreaker", fallbackMethod = "jobApplicationBreakerForId")
+    @RateLimiter(name = "jobApplicationBreaker", fallbackMethod = "jobApplicationBreakerForId")
     public JobApplicationDto getJobApplicationById(String jobApplicationId) {
         JobApplication jobApplication = jobApplicationRepository.findById(jobApplicationId).orElse(null);
         return convertToDto(jobApplication);
     }
+
+    public JobApplicationResult jobApplicationBreakerForId(Long id, Throwable throwable) {
+        String errorMessage = "😥 Uh-oh! We ran into an issue...The service is currently unavailable. Our team is working on resolving the issue as quickly as possible. Please try again later. 🛠️";
+        return new JobApplicationResult(errorMessage);
+    }    
 
     @Override
     public void deleteJobApplication(String jobApplicationId) {
