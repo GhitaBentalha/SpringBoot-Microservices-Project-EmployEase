@@ -2,6 +2,8 @@ package com.hirehub.company.microservice.company;
 
 import java.util.List;
 
+import com.hirehub.company.microservice.company.dto.ReviewMessage;
+
 public interface CompanyService {
     List<Company> getAllCompanies();
     boolean updateCompanyById(Long id, Company updatedCompany);
@@ -11,4 +13,5 @@ public interface CompanyService {
     List<Company> searchCompany(String keyword);
     Company getCompanyByUserId(Long Userid);
     Boolean updateHiringStatus(Long id);
+    void updateCompanyRating(ReviewMessage reviewMessage);
 }

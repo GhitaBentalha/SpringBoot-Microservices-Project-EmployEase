@@ -6,13 +6,21 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.hirehub.company.microservice.company.clients.ReviewClient;
+import com.hirehub.company.microservice.company.dto.ReviewMessage;
+
+import jakarta.ws.rs.NotFoundException;
+
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
     private CompanyRepository companyRepository;
-    public CompanyServiceImpl(CompanyRepository companyRepository) {
+    private ReviewClient reviewClient;
+
+    public CompanyServiceImpl(CompanyRepository companyRepository, ReviewClient reviewClient ) {
         this.companyRepository = companyRepository;
+        this.reviewClient = reviewClient;
     }
 
     @Override
@@ -96,6 +104,15 @@ public class CompanyServiceImpl implements CompanyService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void updateCompanyRating(ReviewMessage reviewMessage) {
+        Company company = companyRepository
+        .findById(reviewMessage.getCompanyId()).orElseThrow(() -> new NotFoundException("Company not found "+reviewMessage.getCompanyId()+" !!"));
+        Double averageRating = reviewClient.getAverageRatingForCompany(reviewMessage.getCompanyId());
+        company.setRating(averageRating);
+        companyRepository.save(company);
     }
 
 }

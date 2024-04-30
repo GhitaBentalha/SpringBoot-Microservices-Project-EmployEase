@@ -4,13 +4,17 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.hirehub.reviews.microservice.review.messaging.ReviewMessageProducer;
+
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
     private ReviewRepository reviewRepository;
+    private ReviewMessageProducer reviewMessageProducer;
 
-    public ReviewServiceImpl(ReviewRepository reviewRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewMessageProducer reviewMessageProducer) {
         this.reviewRepository = reviewRepository;
+        this.reviewMessageProducer = reviewMessageProducer;
     }
 
     @Override
@@ -24,6 +28,7 @@ public class ReviewServiceImpl implements ReviewService {
         if(companyId!=null)
         {
             review.setCompanyId(companyId);
+            reviewMessageProducer.sendMessage(review);
             reviewRepository.save(review);
             return true;
         }

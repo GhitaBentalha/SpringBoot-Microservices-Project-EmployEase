@@ -14,6 +14,7 @@ public class Company {
     private String name;
     private String description;
     private Long ownerId;
+    private Double rating;
     
     @Column(length =1000)
     private String companyLogo;
@@ -77,5 +78,13 @@ public class Company {
 
     public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 }
