@@ -1,4 +1,4 @@
-package com.hirehub.review.microservice;
+package com.hirehub.reviews.microservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

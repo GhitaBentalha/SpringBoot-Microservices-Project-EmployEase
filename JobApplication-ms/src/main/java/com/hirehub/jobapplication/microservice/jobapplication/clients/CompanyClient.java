@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.hirehub.jobapplication.microservice.jobapplication.external.Company;
 
-@FeignClient(name= "COMPANY-SERVICE")
+@FeignClient(name= "COMPANY-SERVICE",url="${company-service.url}")
 public interface CompanyClient {
 
     @GetMapping("/api/companies/{id}")
