@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.hirehub.jobapplication.microservice.jobapplication.external.User;
 
-@FeignClient(name= "USER-SERVICE",url="http://userms:5454")
+@FeignClient(name= "USER-SERVICE")
 public interface UserClient {
 
     @GetMapping("api/users/profile/{id}")
