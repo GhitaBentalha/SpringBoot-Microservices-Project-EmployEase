@@ -41,6 +41,8 @@ services:
       - mysql
     networks:
       - mysqlnetwork
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
 
   companyms:
     image: aarzoo2240/company-service
@@ -125,13 +127,21 @@ services:
 
   gateway:
     image: aarzoo2240/gateway
-    container_name: api-gateway
+    container_name: apigateway
     ports:
       - "8084:8084"
     depends_on:
+      - companyms
+      - jobms
+      - userms
+      - reviewms
+      - jobapplicationms
+      - mysql
       - servicereg
     networks:
       - mysqlnetwork
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
 
 networks:
   mysqlnetwork:
