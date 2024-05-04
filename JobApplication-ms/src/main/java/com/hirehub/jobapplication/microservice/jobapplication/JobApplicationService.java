@@ -8,7 +8,7 @@ public interface JobApplicationService {
 
     JobApplication createJobApplication(Long userId, Long jobId, Long companyId) throws Exception;
 
-    JobApplication updateJobApplicationStatus(String jobApplicationId, JOB_APPLICATION_STATUS status);
+    JobApplication updateJobApplicationStatus(Long jobApplicationId, JOB_APPLICATION_STATUS status);
 
     JobApplication updateJobApplication(JobApplication jobApplication);
 
@@ -16,7 +16,7 @@ public interface JobApplicationService {
 
     List<JobApplicationDto> getAllJobApplicationsForUser(Long userId);
 
-    JobApplicationDto getJobApplicationById(String jobApplicationId);
+    JobApplicationDto getJobApplicationById(Long jobApplicationId);
 
-    void deleteJobApplication(String jobApplicationId);
+    void deleteJobApplication(Long jobApplicationId);
 }

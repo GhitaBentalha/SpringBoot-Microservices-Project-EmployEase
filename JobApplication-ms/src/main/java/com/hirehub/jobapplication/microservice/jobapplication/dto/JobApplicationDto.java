@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import com.hirehub.jobapplication.microservice.jobapplication.JOB_APPLICATION_STATUS;
 import com.hirehub.jobapplication.microservice.jobapplication.external.Company;
-import com.hirehub.jobapplication.microservice.jobapplication.external.Job;
 import com.hirehub.jobapplication.microservice.jobapplication.external.User;
 
 public class JobApplicationDto {
@@ -12,8 +11,8 @@ public class JobApplicationDto {
     private Long jobApplicationId;
     private JOB_APPLICATION_STATUS status;
     private LocalDateTime appliedDate;
-    private Job job;
     private Company company;
+    
     public Long getJobApplicationId() {
         return jobApplicationId;
     }
@@ -32,12 +31,7 @@ public class JobApplicationDto {
     public void setAppliedDate(LocalDateTime appliedDate) {
         this.appliedDate = appliedDate;
     }
-    public Job getJob() {
-        return job;
-    }
-    public void setJob(Job job) {
-        this.job = job;
-    }
+ 
     public Company getCompany() {
         return company;
     }

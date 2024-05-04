@@ -44,7 +44,7 @@ public class JobApplicationController {
     }
 
     @GetMapping("/{jobApplicationId}")
-    public ResponseEntity<JobApplicationDto> getJobApplicationById(@PathVariable String jobApplicationId) {
+    public ResponseEntity<JobApplicationDto> getJobApplicationById(@PathVariable Long jobApplicationId) {
         JobApplicationDto jobApplicationDto = jobApplicationService.getJobApplicationById(jobApplicationId);
         if (jobApplicationDto != null) {
             return new ResponseEntity<>(jobApplicationDto, HttpStatus.OK);
@@ -60,7 +60,7 @@ public class JobApplicationController {
     }
 
     @DeleteMapping("/{jobApplicationId}")
-    public ResponseEntity<Void> deleteJobApplication(@PathVariable String jobApplicationId) {
+    public ResponseEntity<Void> deleteJobApplication(@PathVariable Long jobApplicationId) {
         jobApplicationService.deleteJobApplication(jobApplicationId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

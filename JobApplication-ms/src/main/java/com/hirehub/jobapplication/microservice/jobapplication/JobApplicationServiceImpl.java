@@ -9,11 +9,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hirehub.jobapplication.microservice.jobapplication.clients.CompanyClient;
-import com.hirehub.jobapplication.microservice.jobapplication.clients.JobClient;
 import com.hirehub.jobapplication.microservice.jobapplication.clients.UserClient;
 import com.hirehub.jobapplication.microservice.jobapplication.dto.JobApplicationDto;
 import com.hirehub.jobapplication.microservice.jobapplication.external.Company;
-import com.hirehub.jobapplication.microservice.jobapplication.external.Job;
 import com.hirehub.jobapplication.microservice.jobapplication.external.User;
 import com.hirehub.jobapplication.microservice.jobapplication.mapper.JobApplicationMapper;
 
@@ -33,9 +31,6 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     @Autowired
     CompanyClient companyClient;
 
-    @Autowired
-    JobClient jobClient;
-
     @Override
     public JobApplication createJobApplication(Long userId, Long jobId, Long companyId) throws Exception {
         JobApplication jobApplication=new JobApplication();
@@ -48,7 +43,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
-    public JobApplication updateJobApplicationStatus(String jobApplicationId, JOB_APPLICATION_STATUS status) {
+    public JobApplication updateJobApplicationStatus(Long jobApplicationId, JOB_APPLICATION_STATUS status) {
         Optional<JobApplication> optionalJobApplication = jobApplicationRepository.findById(jobApplicationId);
         if (optionalJobApplication.isPresent()) {
             JobApplication jobApplication = optionalJobApplication.get();
@@ -66,10 +61,9 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     private JobApplicationDto convertToDto(JobApplication jobApplication)
     {
-        Job job = jobClient.getJobById(jobApplication.getJobId());
         Company company = companyClient.getCompany(jobApplication.getCompanyId());
         User user = userClient.findUserId(jobApplication.getUserId());
-        JobApplicationDto jobApplicationDto = JobApplicationMapper.mapToJobApplicationDto(jobApplication, job, company, user);
+        JobApplicationDto jobApplicationDto = JobApplicationMapper.mapToJobApplicationDto(jobApplication, company, user);
         return jobApplicationDto;
     }
 
@@ -103,7 +97,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     @Retry(name = "jobApplicationBreaker", fallbackMethod = "jobApplicationBreakerForId")
     @CircuitBreaker(name = "jobApplicationBreaker", fallbackMethod = "jobApplicationBreakerForId")
     @RateLimiter(name = "jobApplicationBreaker", fallbackMethod = "jobApplicationBreakerForId")
-    public JobApplicationDto getJobApplicationById(String jobApplicationId) {
+    public JobApplicationDto getJobApplicationById(Long jobApplicationId) {
         JobApplication jobApplication = jobApplicationRepository.findById(jobApplicationId).orElse(null);
         return convertToDto(jobApplication);
     }
@@ -114,7 +108,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }    
 
     @Override
-    public void deleteJobApplication(String jobApplicationId) {
+    public void deleteJobApplication(Long jobApplicationId) {
         jobApplicationRepository.deleteById(jobApplicationId);
     }
 

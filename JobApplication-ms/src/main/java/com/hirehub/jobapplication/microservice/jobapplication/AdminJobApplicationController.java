@@ -18,7 +18,7 @@ public class AdminJobApplicationController {
 
     
     @PutMapping("/{jobApplicationId}/status")
-    public ResponseEntity<JobApplication> updateJobApplicationStatus(@PathVariable String jobApplicationId,
+    public ResponseEntity<JobApplication> updateJobApplicationStatus(@PathVariable Long jobApplicationId,
         @RequestParam JOB_APPLICATION_STATUS status) {
         JobApplication updatedJobApplication = jobApplicationService.updateJobApplicationStatus(jobApplicationId, status);
         return new ResponseEntity<>(updatedJobApplication, HttpStatus.OK);

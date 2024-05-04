@@ -61,7 +61,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: 1703HareKrishna#
 
   jobms:
-    image: aarzoo2240/job-service
+    image: job-service:latest
     container_name: jobms
     ports:
       - "8082:8082"
@@ -145,7 +145,7 @@ services:
 
 networks:
   mysqlnetwork:
-    external: true
+    driver: bridge
 
 volumes:
   mysql-data:
