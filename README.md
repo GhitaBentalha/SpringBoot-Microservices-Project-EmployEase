@@ -72,5 +72,5 @@ All services are registered with Eureka for service discovery, and inter-service
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/employease.git
+   git clone https://github.com/Aarzoo1703/SpringBoot-Microservices-Project-EmployEase.git
    cd employease
