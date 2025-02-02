@@ -61,7 +61,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: 1703HareKrishna#
 
   jobms:
-    image: job-service:latest
+    image: aarzoo2240/job-service:latest
     container_name: jobms
     ports:
       - "8082:8082"
