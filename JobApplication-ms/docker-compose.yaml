@@ -143,6 +143,20 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
 
+  employease:
+    image: employease
+    container_name: employease
+    ports:
+      - "5555:5555"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/employease
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1703HareKrishna#
+    depends_on:
+      - mysql
+    networks:
+      - mysqlnetwork
+
 networks:
   mysqlnetwork:
     driver: bridge

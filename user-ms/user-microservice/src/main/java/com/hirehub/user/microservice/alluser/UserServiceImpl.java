@@ -23,4 +23,11 @@ public class UserServiceImpl implements UserService{
         userRepository.save(user);
     }
 
+    public User findByEmailId(String emailId) {
+        // Implémentation pour rechercher l'utilisateur par email
+        // Cela pourrait impliquer un appel à un repository JPA
+        return userRepository.findByEmailId(emailId);
+    }
+
+
 }

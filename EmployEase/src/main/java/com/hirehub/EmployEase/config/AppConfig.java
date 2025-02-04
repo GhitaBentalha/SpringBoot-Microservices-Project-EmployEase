@@ -43,13 +43,14 @@ public class AppConfig {
                CorsConfiguration cfg = new CorsConfiguration();
                cfg.setAllowedOrigins(Arrays.asList(
                 "http://localhost:5454",
-                "https://employease.hirehub.app"
+                "https://employease.hirehub.app",
+                "http://localhost:3000"
                ));
-               cfg.setAllowedMethods(Collections.singletonList("*"));
-               cfg.setAllowCredentials(true);
-               cfg.setAllowedHeaders(Collections.singletonList("*"));
-               cfg.setExposedHeaders(Arrays.asList("Authorization"));
-               cfg.setMaxAge(3600L);
+                cfg.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Méthodes autorisées
+                cfg.setAllowCredentials(true); // Autoriser les cookies
+                cfg.setAllowedHeaders(Collections.singletonList("*")); // Tous les en-têtes autorisés
+                cfg.setExposedHeaders(Arrays.asList("Authorization")); // Exposer l'en-tête Authorization
+                cfg.setMaxAge(3600L); // Durée de mise en cache des options CORS
                return cfg;
             }
         };

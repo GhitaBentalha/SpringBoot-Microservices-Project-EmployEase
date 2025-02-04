@@ -18,6 +18,24 @@
 		<spring-cloud.version>2022.0.5</spring-cloud.version>
 	</properties>
 	<dependencies>
+			<!-- JJWT pour la gestion des JWT -->
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt-api</artifactId>
+				<version>0.11.5</version>
+			</dependency>
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt-impl</artifactId>
+				<version>0.11.5</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt-jackson</artifactId>
+				<version>0.11.5</version>
+				<scope>runtime</scope>
+			</dependency>
 			<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -121,6 +139,16 @@
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-core</artifactId>
 			<version>9.0.68</version>
+		</dependency>
+        <dependency>
+            <groupId>com.hirehub</groupId>
+            <artifactId>user-microservice</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+		<dependency>
+			<groupId>com.onixbyte</groupId>
+			<artifactId>simple-jwt-jjwt</artifactId>
+			<version>1.5.0</version>
 		</dependency>
 	</dependencies>
 
